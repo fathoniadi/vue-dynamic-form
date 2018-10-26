@@ -1,14 +1,7 @@
 <template>
   <div class="dropdown" >
     <div class="form-group" >
-      <div v-show = "titleEdit == false">
-        <label @dblclick = "titleEdit = true"> {{title}} </label>
-      </div>
-      <div v-show = "titleEdit == true">
-        <input class="form-control" v-show = "titleEdit == true" v-model = "title"
-        v-on:blur= "endTitleEditing()"
-        @keyup.enter = "endTitleEditing()">
-      </div>
+      <FormTitle />
       <div>
         <input type="text" name="question_type[]" value="dropdown" class="d-none">
         <select name="question[]" id="" class="form-control">
@@ -29,23 +22,24 @@
         </div>
       </div>
     </div>
+    <DeleteButton v-bind:forms="forms" v-bind:componentKey="componentKey" />
   </div>
 </template>
 
 <script>
+import FormTitle from '@/components/form/FormTitle'
+import DeleteButton from '@/components/form/DeleteButton'
+
 export default {
   name: 'TextArea',
+  components: {FormTitle, DeleteButton},
+  props: ['forms', 'componentKey'],
   data: function () {
     return {
-      titleEdit: false,
-      title: 'Untitled Question',
       inputDropdownOptions: [{value: 'Option 1'}]
     }
   },
   methods: {
-    endTitleEditing: function () {
-      this.titleEdit = false
-    },
     addOption: function () {
       this.inputDropdownOptions.push({value: 'Option ' + (this.inputDropdownOptions.length + 1)})
     }

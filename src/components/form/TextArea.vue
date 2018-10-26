@@ -1,33 +1,26 @@
 <template>
   <div class="text-area" >
+
     <div class="form-group" >
-        <div v-show = "titleEdit == false">
-            <label @dblclick = "titleEdit = true"> {{title}} </label>
-        </div>
-        <div v-show = "titleEdit == true">
-            <input class="form-control" v-show = "titleEdit == true" v-model = "title"
-            v-on:blur= "endTitleEditing()"
-            @keyup.enter = "endTitleEditing()">
-        </div>
+        <FormTitle />
         <input type="text" name="question_type[]" value="textarea" class="d-none">
         <textarea name="question[]" id="" cols="30" rows="5" class="form-control" :placeholder="placeholder"></textarea>
-      </div>
+    </div>
+    <DeleteButton v-bind:forms="forms" v-bind:componentKey="componentKey" />
   </div>
 </template>
 
 <script>
+import FormTitle from '@/components/form/FormTitle'
+import DeleteButton from '@/components/form/DeleteButton'
+
 export default {
   name: 'TextArea',
+  props: ['forms', 'componentKey'],
+  components: {FormTitle, DeleteButton},
   data: function () {
     return {
-      titleEdit: false,
-      title: 'Untitled Question',
       placeholder: 'Long answer text'
-    }
-  },
-  methods: {
-    endTitleEditing: function () {
-      this.titleEdit = false
     }
   }
 }

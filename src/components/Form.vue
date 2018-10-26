@@ -6,7 +6,7 @@
           <div class="col-md-8 mx-auto">
             <div class="card">
               <div class="card-header">
-                <h2 v-show = "titleEdit == false" @dblclick = "titleEdit = true" >{{ title }}</h2>
+                <h1 v-show = "titleEdit == false" @dblclick = "titleEdit = true" >{{ title }}</h1>
                 <div v-show = "titleEdit == true">
                   <input class="form-control form-control-lg" v-show = "titleEdit == true" v-model = "title"
                   v-on:blur= "endTitleEditing()"
@@ -28,11 +28,14 @@
                   </b-dropdown>
                 </div>
               </div>
-              <div :class="{'box-selected':key === pointer}"
-              @click="clicked(key)"
-              v-for="(form, key) in forms" :key="key" class="card-body">
-                <component  :is="form" />
-              </div>
+
+              <draggable v-model="forms" :options="{group:'people'}" @start="drag=true" @end="drag=false">
+                <div :class="{'box-selected':key === pointer}"
+                @click="clicked(key)"
+                v-for="(form, key) in forms" :key="key" class="card-body">
+                  <component v-bind:forms="forms" v-bind:componentKey="key" :is="form.component" />
+                </div>
+              </draggable>
             </div>
           </div>
         </div>
@@ -56,10 +59,11 @@
 import TextBox from '@/components/form/TextBox'
 import TextArea from '@/components/form/TextArea'
 import Dropdown from '@/components/form/Dropdown'
+import draggable from 'vuedraggable'
 
 export default {
   name: 'Form',
-  components: {TextBox, TextArea, Dropdown},
+  components: {TextBox, TextArea, Dropdown, draggable},
   data () {
     return {
       forms: [],
@@ -73,11 +77,11 @@ export default {
   methods: {
     addTextBox: function (name) {
       if (name === 'TextBox') {
-        this.forms.push(TextBox)
+        this.forms.push({'component': TextBox, 'order': (this.forms.length + 1), 'fixed': false})
       } else if (name === 'TextArea') {
-        this.forms.push(TextArea)
+        this.forms.push({'component': TextArea, 'order': (this.forms.length + 1), 'fixed': false})
       } else if (name === 'Dropdown') {
-        this.forms.push(Dropdown)
+        this.forms.push({'component': Dropdown, 'order': (this.forms.length + 1), 'fixed': false})
       }
     },
     clicked: function (key) {
@@ -92,21 +96,3 @@ export default {
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h1, h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-</style>
