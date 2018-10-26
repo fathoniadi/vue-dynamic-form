@@ -1,0 +1,8 @@
+.box-selected {
+    border-left: solid 5px;
+    border-color:#17a2b8;
+}
+
+.input-option{
+    margin-top: 10px;
+}
