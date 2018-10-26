@@ -1,5 +1,5 @@
 <template>
-  <div class="text-area" >
+  <div class="dropdown" >
     <div class="form-group" >
       <div v-show = "titleEdit == false">
         <label @dblclick = "titleEdit = true"> {{title}} </label>

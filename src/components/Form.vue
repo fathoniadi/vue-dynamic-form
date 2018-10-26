@@ -38,6 +38,16 @@
         </div>
       </div>
     </section>
+    <!-- <section>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-8 mx-auto text-right">
+            <br>
+            <button class="btn btn-info btn-lg">Get Form Code</button>
+          </div>
+        </div>
+      </div>
+    </section> -->
   </div>
 </template>
 
