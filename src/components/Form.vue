@@ -6,15 +6,15 @@
           <div class="col-md-8 mx-auto">
             <div class="card">
               <div class="card-header">
-                <h1 v-show = "titleEdit == false" @dblclick = "titleEdit = true" >{{ title }}</h1>
-                <div v-show = "titleEdit == true">
-                  <input class="form-control form-control-lg" v-show = "titleEdit == true" v-model = "title"
+                <h1 v-show = "forms.title.isEdit == false" @dblclick = "forms.title.isEdit = true" >{{ forms.title.content }}</h1>
+                <div v-show = "forms.title.isEdit == true">
+                  <input class="form-control form-control-lg" v-show = "forms.title.isEdit == true" v-model = "forms.title.content"
                   v-on:blur= "endTitleEditing()"
                   @keyup.enter = "endTitleEditing()">
                 </div>
-                <p v-show="descriptionEdit == false" @dblclick = "descriptionEdit = true" > {{ description }} </p>
-                <div v-show="descriptionEdit == true">
-                  <textarea class="form-control" v-show="descriptionEdit == true" v-model="description"
+                <p v-show="forms.description.isEdit == false" @dblclick = "forms.description.isEdit = true" > {{ forms.description.content }} </p>
+                <div v-show="forms.description.isEdit == true">
+                  <textarea class="form-control" v-show="forms.description.isEdit == true" v-model="forms.description.content"
                   v-on:blur= "endDescriptionEditing()"
                   @keyup.enter = "endDescriptionEditing()"></textarea>
                 </div>
@@ -29,14 +29,14 @@
                 </div>
               </div>
 
-              <draggable v-model="forms" :options="{draggable:'.form-component'}" @start="drag=true" @end="drag=false">
+              <draggable v-model="forms.components" @start="drag=true" @end="drag=false">
                 <div :class="{'box-selected':form.form === selected_form}"
                 @click="clicked(form.form)"
-                v-for="(form, key) in forms" :key="key" class="card-body form-component">
+                v-for="(form, key) in forms.components" :key="key" class="card-body form-component">
                   <div v-show="form.form === selected_form" class="text-center">
                     <i class="fa fa-arrows text-secondary"></i>
                   </div>
-                  <component v-bind:form="form" :is="form.form.component" />
+                  <component v-bind:form="form" :is="form.form.content" />
                 </div>
               </draggable>
             </div>
@@ -79,21 +79,21 @@ export default {
   methods: {
     addTextBox: function (name) {
       if (name === 'TextBox') {
-        this.$store.dispatch('addForm', {'component': TextBox, 'order': (this.forms.length + 1), 'fixed': false, 'type': 'textbox', 'title': 'Untitled Question', titleEdit: false, options: []})
+        this.$store.dispatch('addForm', {'content': TextBox, 'order': (this.forms.length + 1), 'fixed': false, 'type': 'textbox', 'title': 'Untitled Question', titleEdit: false, options: [], required: false})
       } else if (name === 'TextArea') {
-        this.$store.dispatch('addForm', {'component': TextArea, 'order': (this.forms.length + 1), 'fixed': false, 'type': 'textarea', 'title': 'Untitled Question', titleEdit: false, options: []})
+        this.$store.dispatch('addForm', {'content': TextArea, 'order': (this.forms.length + 1), 'fixed': false, 'type': 'textarea', 'title': 'Untitled Question', titleEdit: false, options: [], required: false})
       } else if (name === 'Dropdown') {
-        this.$store.dispatch('addForm', {'component': Dropdown, 'order': (this.forms.length + 1), 'fixed': false, 'type': 'dropdown', 'title': 'Untitled Question', titleEdit: false, options: [{value: 'Option 1'}]})
+        this.$store.dispatch('addForm', {'content': Dropdown, 'order': (this.forms.length + 1), 'fixed': false, 'type': 'dropdown', 'title': 'Untitled Question', titleEdit: false, options: [{value: 'Option 1'}], required: false})
       }
     },
     clicked: function (form) {
       this.selected_form = form
     },
     endTitleEditing: function () {
-      this.titleEdit = false
+      this.forms.title.isEdit = false
     },
     endDescriptionEditing: function () {
-      this.descriptionEdit = false
+      this.forms.description.isEdit = false
     }
   }
 }

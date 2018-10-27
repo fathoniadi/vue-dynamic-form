@@ -18,7 +18,6 @@ export default {
   methods: {
     endTitleEditing: function () {
       this.form.form.titleEdit = false
-      console.log(this.form)
     }
   }
 }

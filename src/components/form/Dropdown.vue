@@ -12,8 +12,11 @@
         List Options
         <div class="row">
           <div class="col-md-6">
-            <div v-for="(option, key) in form.form.options " :key="key">
-              <input type="text" class="form-control input-option" placeholder="Option" v-model="option.value">
+            <div class="" style="padding-left: 15px" v-for="(option, key) in form.form.options " :key="key">
+              <div class="row">
+                <input type="text" class="form-control input-option col-md-10" placeholder="Option" v-model="option.value">
+              <label class="col-sm-2 col-form-label col-form-label-sm text-center" @click="deleteOption(option)" style="padding: 15px"><i class="fa fa-times fa-lg text-danger align-bottom h-100"></i></label>
+              </div>
             </div>
           </div>
           <div class="col-md-6 text-right">
@@ -31,12 +34,15 @@ import FooterComponent from '@/components/form/FooterComponent'
 import FormTitle from '@/components/form/FormTitle'
 
 export default {
-  name: 'TextArea',
+  name: 'Dropdown',
   components: {FooterComponent, FormTitle},
   props: ['componentKey', 'forms', 'form'],
   methods: {
     addOption: function () {
-      this.form.form.options.push({value: 'Option ' + (this.form.options.length + 1)})
+      this.form.form.options.push({value: 'Option ' + (this.form.form.options.length + 1)})
+    },
+    deleteOption: function (option) {
+      this.form.form.options.splice(this.form.form.options.indexOf(option), 1)
     }
   }
 }
