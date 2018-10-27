@@ -8,3 +8,11 @@
 .input-option{
     margin-top: 10px;
 }
+
+.FooterComponent {
+    padding: 10px
+}
+
+.delebutton:hover{
+    color: red !important;
+}

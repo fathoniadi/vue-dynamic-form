@@ -29,11 +29,14 @@
                 </div>
               </div>
 
-              <draggable v-model="forms" :options="{group:'people'}" @start="drag=true" @end="drag=false">
-                <div :class="{'box-selected':key === pointer}"
-                @click="clicked(key)"
-                v-for="(form, key) in forms" :key="key" class="card-body">
-                  <component v-bind:forms="forms" v-bind:componentKey="key" :is="form.component" />
+              <draggable v-model="forms" :options="{draggable:'.form-component'}" @start="drag=true" @end="drag=false">
+                <div :class="{'box-selected':form.form === selected_form}"
+                @click="clicked(form.form)"
+                v-for="(form, key) in forms" :key="key" class="card-body form-component">
+                  <div v-show="form.form === selected_form" class="text-center">
+                    <i class="fa fa-arrows text-secondary"></i>
+                  </div>
+                  <component v-bind:form="form" :is="form.form.component" />
                 </div>
               </draggable>
             </div>
@@ -41,16 +44,6 @@
         </div>
       </div>
     </section>
-    <!-- <section>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-8 mx-auto text-right">
-            <br>
-            <button class="btn btn-info btn-lg">Get Form Code</button>
-          </div>
-        </div>
-      </div>
-    </section> -->
   </div>
 </template>
 
@@ -66,26 +59,35 @@ export default {
   components: {TextBox, TextArea, Dropdown, draggable},
   data () {
     return {
-      forms: [],
       title: 'Untitled Form',
       description: 'Form description',
-      pointer: -1,
+      selected_form: {},
       titleEdit: false,
       descriptionEdit: false
+    }
+  },
+  computed: {
+    forms: {
+      get: function () {
+        return this.$store.state.forms
+      },
+      set: function (form) {
+        this.$store.dispatch('updateForm', form)
+      }
     }
   },
   methods: {
     addTextBox: function (name) {
       if (name === 'TextBox') {
-        this.forms.push({'component': TextBox, 'order': (this.forms.length + 1), 'fixed': false})
+        this.$store.dispatch('addForm', {'component': TextBox, 'order': (this.forms.length + 1), 'fixed': false, 'type': 'textbox', 'title': 'Untitled Question', titleEdit: false, options: []})
       } else if (name === 'TextArea') {
-        this.forms.push({'component': TextArea, 'order': (this.forms.length + 1), 'fixed': false})
+        this.$store.dispatch('addForm', {'component': TextArea, 'order': (this.forms.length + 1), 'fixed': false, 'type': 'textarea', 'title': 'Untitled Question', titleEdit: false, options: []})
       } else if (name === 'Dropdown') {
-        this.forms.push({'component': Dropdown, 'order': (this.forms.length + 1), 'fixed': false})
+        this.$store.dispatch('addForm', {'component': Dropdown, 'order': (this.forms.length + 1), 'fixed': false, 'type': 'dropdown', 'title': 'Untitled Question', titleEdit: false, options: [{value: 'Option 1'}]})
       }
     },
-    clicked: function (key) {
-      this.pointer = key
+    clicked: function (form) {
+      this.selected_form = form
     },
     endTitleEditing: function () {
       this.titleEdit = false

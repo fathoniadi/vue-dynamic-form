@@ -1,10 +1,10 @@
 <template>
     <div class="FromTitle">
-        <div v-show = "titleEdit == false">
-            <h4 @dblclick = "titleEdit = true"> {{title}} </h4>
+        <div v-show = "form.form.titleEdit == false">
+            <h4 @dblclick = "form.form.titleEdit = true"> {{form.form.title}} </h4>
         </div>
-        <div v-show = "titleEdit == true">
-            <input class="form-control form-control-lg" v-show = "titleEdit == true" v-model = "title"
+        <div v-show = "form.form.titleEdit == true">
+            <input class="form-control form-control-lg" v-show = "form.form.titleEdit == true" v-model = "form.form.title"
             v-on:blur= "endTitleEditing()"
             @keyup.enter = "endTitleEditing()">
         </div>
@@ -14,15 +14,11 @@
 <script>
 export default {
   name: 'FormTitle',
-  data: function () {
-    return {
-      titleEdit: false,
-      title: 'Untitled Question'
-    }
-  },
+  props: ['form'],
   methods: {
     endTitleEditing: function () {
-      this.titleEdit = false
+      this.form.form.titleEdit = false
+      console.log(this.form)
     }
   }
 }
